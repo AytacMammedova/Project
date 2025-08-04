@@ -16,13 +16,13 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Name field is required")
     private String name;
 
-    @NotBlank(message = "Username field is required")
-    private String username;
+//    @NotBlank(message = "Username field is required")
+//    private String username;
 
     @NotBlank(message = "Email field is required")
     @Email(message = "Email format is invalid")
@@ -51,18 +51,21 @@ public class User {
     @JsonManagedReference
     private List<Address>addresses;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Bucket bucket;
+
     @Size(min = 6,message = "Password must be at least 6 characters")
     private String password;
-    private boolean isAccountNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isCredentialsNonExpired;
-    private boolean isEnabled;
-
-    private String issueToken;
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<Authority>authorities;
+//    private boolean isAccountNonExpired;
+//    private boolean isAccountNonLocked;
+//    private boolean isCredentialsNonExpired;
+//    private boolean isEnabled;
+//
+//    private String issueToken;
+//
+//    @ToString.Exclude
+//    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//    private List<Authority>authorities;
 
 
 

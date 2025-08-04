@@ -15,7 +15,7 @@ import java.util.List;
 public class AddressController {
     private final AddressService addressService;
     @GetMapping("/{userId}")
-    public List<AddressDto> getAddressesByUserId(@PathVariable Integer userId){
+    public List<AddressDto> getAddressesByUserId(@PathVariable Long userId){
         return addressService.getAddressesByUserId(userId);
     }
     @PostMapping
@@ -24,12 +24,12 @@ public class AddressController {
         return addressService.add(addressAddDto);
     }
     @PutMapping("/{id}")
-    public AddressDto update(@PathVariable Integer id,@RequestBody AddressAddDto addressAddDto){
+    public AddressDto update(@PathVariable Long id,@RequestBody AddressAddDto addressAddDto){
         return addressService.update(id, addressAddDto);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer id){
+    public void delete(@PathVariable Long id){
         addressService.delete(id);
     }
 }

@@ -37,7 +37,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     public ProductType update(Integer id, ProductType productType) {
         ProductType productType1=productTypeRepository.findById(id).orElseThrow(IllegalStateException::new);
         productType1.setName(productType.getName());
-        return productTypeRepository.save(productType);
+        return productTypeRepository.save(productType1);
     }
 
     @Override

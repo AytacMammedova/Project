@@ -12,15 +12,14 @@ import lombok.ToString;
 @Entity
 @Table(name = "product_bucket")
 public class ProductBucket {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private ProductBucketId id;
     private Integer quantity;
     @Column(name="total_amount")
     private double totalAmount;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "bucket_id",referencedColumnName = "id")
+    @MapsId("bucketId")
     private Bucket bucket;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)

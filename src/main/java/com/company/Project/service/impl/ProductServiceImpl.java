@@ -66,9 +66,10 @@ public class ProductServiceImpl implements ProductService {
             product.setGender(productAddDto.getGender());
         }
         if(Objects.nonNull(productAddDto.getImage())){
-            product.setImage(product.getImage());
+            product.setImage(productAddDto.getImage());
         }
         product.setUpdatedDate(LocalDate.now());
+        productRepository.save(product);
         return productMapper.toProductDto(product);
     }
 

@@ -1,5 +1,6 @@
 package com.company.Project.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -25,8 +27,9 @@ public class Bucket {
     private LocalDate orderDate;
     private double amount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne
@@ -34,6 +37,6 @@ public class Bucket {
     private Payment payment;
 
     @OneToMany(mappedBy = "bucket",cascade = CascadeType.ALL)
-    private List<ProductBucket>productBucketList;
+    private List<ProductBucket>productBucketList=new ArrayList<>();
     //total amount sum ile etmek
 }

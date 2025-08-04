@@ -1,7 +1,10 @@
 package com.company.Project.controller;
 
 import com.company.Project.model.dto.BucketDto;
+import com.company.Project.model.dto.request.BucketAddDto;
+import com.company.Project.model.entity.ProductBucketId;
 import com.company.Project.service.BucketService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,25 +14,28 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BucketController {
     private final BucketService bucketService;
-    @GetMapping("/{bucketId}")
-    public BucketDto getById(@PathVariable Long bucketId){
-        return bucketService.getById(bucketId);
+    @GetMapping("/{userId}")
+    public BucketDto getById(@PathVariable Long userId){
+        return bucketService.getById(userId);
     }
-    @PostMapping("/{userId}")
+
+
+    @PostMapping("/add-product")
     @ResponseStatus(HttpStatus.CREATED)
-    public BucketDto createBucket(@PathVariable Integer userId){
-        return bucketService.createBucket(userId);
+    public BucketDto addProductToBucket(@RequestBody BucketAddDto bucketAddDto){
+        return bucketService.addProductToBucket(bucketAddDto);
     }
-    @PostMapping("/{bucketId}/add-product/{productId}/{quantity}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addProductToBucket(@PathVariable Long bucketId,@PathVariable Integer productId,@PathVariable Integer quantity){
-        bucketService.addProductToBucket(bucketId,productId,quantity);
-    }
-    @DeleteMapping("/{bucketId}/delete-product/{productId}")
+
+    @DeleteMapping("/{bucketId}/delete-product/{productBucketId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProductFromBucket(@PathVariable Long bucketId,@PathVariable Integer productId){
-        bucketService.deleteProductFromBucket(bucketId, productId);
+    public void deleteProductFromBucket(@Parameter(description = "Bucket ID", example = "1")
+                                            @PathVariable Long bucketId,
+                                        @Parameter(description = "Product sequence number in bucket (starts from 1)", example = "2")
+                                            @PathVariable Long productBucketId){
+        bucketService.deleteProductFromBucket(bucketId, productBucketId);
     }
+
+
     @DeleteMapping("/clear/{bucketId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void clearBucket(@PathVariable Long bucketId){

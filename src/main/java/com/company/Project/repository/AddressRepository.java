@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface AddressRepository extends JpaRepository<Address,Integer> {
-    @Query(value = "select * from address a join user_address ua on a.id=ua.address_id ua.user_id = :userId ",nativeQuery = true)
-    List<Address>getAddressesByUserId(Integer userId);
+public interface AddressRepository extends JpaRepository<Address,Long> {
+    @Query(value = "SELECT * FROM address a JOIN user_address ua ON a.id = ua.address_id WHERE ua.user_id = :userId", nativeQuery = true)
+    List<Address>getAddressesByUserId(Long userId);
 
 }

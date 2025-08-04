@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 public interface UserService {
     List<UserDto> getAllUsers();
-    UserDto getById(Integer id);
+    UserDto getById(Long id);
     UserDto add(UserAddDto userAddDto);
-    UserDto update(Integer id, UserUpdateRequest userUpdateRequest);
-    void delete(Integer id);
+    UserDto update(Long id, UserUpdateRequest userUpdateRequest);
+    void delete(Long id);
 
 }

@@ -21,7 +21,7 @@ public class AddressServiceImpl implements AddressService {
     private final UserRepository userRepository;
     private final AddressMapper addressMapper;
     @Override
-    public List<AddressDto> getAddressesByUserId(Integer userId) {
+    public List<AddressDto> getAddressesByUserId(Long userId) {
         List<Address>addressList=addressRepository.getAddressesByUserId(userId);
         return addressMapper.toAddressDtoList(addressList);
 
@@ -33,7 +33,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressDto update(Integer id, AddressAddDto addressAddDto) {
+    public AddressDto update(Long id, AddressAddDto addressAddDto) {
         Address address=addressRepository.findById(id).orElseThrow(IllegalStateException::new);
         if(Objects.nonNull(addressAddDto.getCity())){
             address.setCity(addressAddDto.getCity());
@@ -51,7 +51,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         addressRepository.deleteById(id);
     }
 }

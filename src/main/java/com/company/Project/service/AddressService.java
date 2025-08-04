@@ -10,8 +10,8 @@ import java.util.List;
 @Service
 public interface AddressService {
 
-    List<AddressDto> getAddressesByUserId(Integer userId);
+    List<AddressDto> getAddressesByUserId(Long userId);
     AddressDto add(AddressAddDto addressAddDto);
-    AddressDto update(Integer id, AddressAddDto addressAddDto);
-    void delete(Integer id);
+    AddressDto update(Long id, AddressAddDto addressAddDto);
+    void delete(Long id);
 }

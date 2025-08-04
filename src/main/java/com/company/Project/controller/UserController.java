@@ -21,7 +21,7 @@ public class UserController {
         return userService.getAllUsers();
     }
     @GetMapping("/{id}")
-    public UserDto getById(@PathVariable Integer id){
+    public UserDto getById(@PathVariable Long id){
         return userService.getById(id);
     }
     @PostMapping
@@ -30,11 +30,11 @@ public class UserController {
         return userService.add(userAddDto);
     }
     @PutMapping("/{id}")
-    public UserDto update(@PathVariable Integer id,@Valid @RequestBody UserUpdateRequest userUpdateRequest){
+    public UserDto update(@PathVariable Long id,@Valid @RequestBody UserUpdateRequest userUpdateRequest){
         return userService.update(id, userUpdateRequest);
     }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id){
+    public void delete(@PathVariable Long id){
         userService.delete(id);
     }
 }

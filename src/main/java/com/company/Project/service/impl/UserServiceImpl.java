@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getById(Integer id) {
+    public UserDto getById(Long id) {
         return userMapper.toUserDto(userRepository.findById(id).orElseThrow(IllegalStateException ::new));
     }
 
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(Integer id, UserUpdateRequest userUpdateRequest) {
+    public UserDto update(Long id, UserUpdateRequest userUpdateRequest) {
         User user=userRepository.findById(id).orElseThrow(()->new UserNotFoundException("No user with id: "+id));
         User updatedUser = userMapper.updateUser(userUpdateRequest,user);
         userRepository.save(updatedUser);
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         userRepository.deleteById(id);
     }
 
