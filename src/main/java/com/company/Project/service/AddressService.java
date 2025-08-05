@@ -14,4 +14,8 @@ public interface AddressService {
     AddressDto add(AddressAddDto addressAddDto);
     AddressDto update(Long id, AddressAddDto addressAddDto);
     void delete(Long id);
+
+    // Admin operations
+    List<AddressDto> getAllAddresses();
+    long countAddresses();
 }

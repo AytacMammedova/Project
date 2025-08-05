@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 public class ProductBucketDto {
 
+    private Long bucketProductId;
     private Integer quantity;
     private double totalAmount;
-    private Bucket bucket;
-    private Product product;
+    private ProductDto product;
 }

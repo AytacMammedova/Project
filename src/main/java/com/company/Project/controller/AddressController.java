@@ -14,22 +14,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AddressController {
     private final AddressService addressService;
-    @GetMapping("/{userId}")
-    public List<AddressDto> getAddressesByUserId(@PathVariable Long userId){
-        return addressService.getAddressesByUserId(userId);
+    @GetMapping
+    public List<AddressDto> getAllAddresses() {
+        return addressService.getAllAddresses();
     }
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public AddressDto add(@RequestBody AddressAddDto addressAddDto){
-        return addressService.add(addressAddDto);
-    }
-    @PutMapping("/{id}")
-    public AddressDto update(@PathVariable Long id,@RequestBody AddressAddDto addressAddDto){
-        return addressService.update(id, addressAddDto);
-    }
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id){
-        addressService.delete(id);
+
+    @GetMapping("/stats/count")
+    public long getAddressCount() {
+        return addressService.countAddresses();
     }
 }

@@ -47,7 +47,7 @@ public class User {
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(name = "user_address",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "adress_id"))
+            inverseJoinColumns = @JoinColumn(name = "address_id"))
     @JsonManagedReference
     private List<Address>addresses;
 

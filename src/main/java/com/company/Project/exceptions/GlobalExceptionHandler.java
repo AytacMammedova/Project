@@ -23,6 +23,13 @@ public class GlobalExceptionHandler {
         ErrorResponse response = new ErrorResponse(e.getMessage(), httpStatus, LocalDateTime.now());
         return new ResponseEntity<>(response, httpStatus);
     }
+    @ExceptionHandler(value = {AddressOwnershipException.class})
+    public ResponseEntity<Object> handleAddressOwnershipException(AddressOwnershipException e){
+        HttpStatus httpStatus=HttpStatus.FORBIDDEN;
+        ErrorResponse response = new ErrorResponse(e.getMessage(), httpStatus, LocalDateTime.now());
+        return new ResponseEntity<>(response, httpStatus);
+
+    }
 
 
 }

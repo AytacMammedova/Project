@@ -20,7 +20,7 @@ public class Address {
     @Column(name = "address_desc")
     private String addressDesc;
 
-    @ManyToMany(mappedBy = "addresses")
+    @ManyToMany(mappedBy = "addresses",fetch = FetchType.LAZY)
     @JsonBackReference
     private List<User> users;
 

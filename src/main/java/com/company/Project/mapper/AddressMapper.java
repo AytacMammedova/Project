@@ -12,4 +12,5 @@ public interface AddressMapper {
     List<AddressDto> toAddressDtoList(List<Address> addressList);
     List<Address>toAddressList(List<AddressAddDto>addressAddDtoList);
     Address toAddress(AddressAddDto addressAddDto);
+    Address toAddressFromAddressDto(AddressDto addressDto);
 }

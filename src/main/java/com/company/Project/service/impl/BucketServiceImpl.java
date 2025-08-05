@@ -35,7 +35,12 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public BucketDto getById(Long userId) {
-        return bucketMapper.toBucketDto(bucketRepository.findBucketByUserId(userId).orElseThrow(()->new BucketNotFoundException("No bucket with id"+userId)));
+        log.info("Getting bucket for user ID: {}", userId);
+        Bucket bucket = bucketRepository.findBucketByUserId(userId)
+                    .orElseThrow(() -> new BucketNotFoundException("No bucket found for user ID: " + userId));
+        log.info("Found bucket with ID: {} for user: {}", bucket.getId(), userId);
+        return bucketMapper.toBucketDto(bucket);
+
     }
 
     @Override

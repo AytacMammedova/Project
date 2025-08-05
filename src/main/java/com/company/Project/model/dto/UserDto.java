@@ -11,5 +11,5 @@ public class UserDto {
     private String email;
     private String phone;
     private LocalDate dateOfBirth;
-    private List<Address> addresses;
+    private List<AddressDto> addresses;
 }

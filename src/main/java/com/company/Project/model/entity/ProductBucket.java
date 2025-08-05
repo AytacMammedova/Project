@@ -1,5 +1,6 @@
 package com.company.Project.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,11 +19,13 @@ public class ProductBucket {
     @Column(name="total_amount")
     private double totalAmount;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("bucketId")
+    @JsonIgnore
     private Bucket bucket;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("bucketProductId")
     @JoinColumn(name = "product_id",referencedColumnName = "id")
     private Product product;
 

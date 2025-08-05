@@ -30,6 +30,7 @@ public class Bucket {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToOne

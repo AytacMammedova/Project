@@ -13,16 +13,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @RequiredArgsConstructor
 @Slf4j
 public class ProjectApplication {
-	private final CategoryRepository categoryRepository;
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectApplication.class, args);
-	}
 
+	}
 
 	public void run(String... args) throws Exception {
-		Category category=categoryRepository.findById(2).get();
-		log.info("Category = {}",category);
+
 	}
+
 
 
 
