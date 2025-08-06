@@ -19,6 +19,8 @@ public class User {
     private Long id;
 
     @NotBlank(message = "Name field is required")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 50 characters")
+    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name can only contain letters and spaces")
     private String name;
 
 //    @NotBlank(message = "Username field is required")
@@ -26,6 +28,7 @@ public class User {
 
     @NotBlank(message = "Email field is required")
     @Email(message = "Email format is invalid")
+    @Size(max = 100, message = "Email cannot exceed 100 characters")
     private String email;
 
     @NotBlank(message = "Phone field is required")

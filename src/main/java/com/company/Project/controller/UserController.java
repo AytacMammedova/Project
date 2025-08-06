@@ -5,7 +5,6 @@ import com.company.Project.model.dto.UserDto;
 import com.company.Project.model.dto.request.AddressAddDto;
 import com.company.Project.model.dto.request.UserAddDto;
 import com.company.Project.model.dto.request.UserUpdateRequest;
-import com.company.Project.service.AddressService;
 import com.company.Project.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

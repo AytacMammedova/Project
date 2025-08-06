@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto add(UserAddDto userAddDto) {
-        log.debug("Creating new user: {}", userAddDto.getName());
+        log.info("Creating new user: {}", userAddDto.getName());
         User user=userMapper.toUser(userAddDto);
         user.setRole(roleRepository.findByName("USER"));
         User createdUser=userRepository.save(user);
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(Long id, UserUpdateRequest userUpdateRequest) {
         User user=userRepository.findById(id).orElseThrow(()->new UserNotFoundException("No user with id: "+id));
-        log.debug("Updating user with ID: {}",id);
+        log.info("Updating user with ID: {}",id);
         userMapper.updateUser(userUpdateRequest, user);
         User updatedUser = userRepository.save(user);
         log.info("Successfully updated user with id: {}", id);
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        log.debug("Deleting user with ID: {}", id);
+        log.info("Deleting user with ID: {}", id);
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("No user with id: " + id);
         }
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto addAddressToUser(Long userId, AddressAddDto addressAddDto) {
-        log.debug("Adding address to user: {}", userId);
+        log.info("Adding address to user: {}", userId);
 
         User user=userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("No user with id: "+userId));
 
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUserAddress(Long userId, Long addressId) {
-        log.debug("Deleting address {} for user {}", addressId, userId);
+        log.info("Deleting address {} for user {}", addressId, userId);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("No user with id: " + userId));

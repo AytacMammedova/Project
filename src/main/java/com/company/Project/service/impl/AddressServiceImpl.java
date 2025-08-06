@@ -26,21 +26,21 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressDto> getAddressesByUserId(Long userId) {
-        log.debug("Getting addresses for user: {}", userId);
+        log.info("Getting addresses for user: {}", userId);
         List<Address>addressList=addressRepository.getAddressesByUserId(userId);
         return addressMapper.toAddressDtoList(addressList);
     }
 
     @Override
     public AddressDto add(AddressAddDto addressAddDto) {
-        log.debug("Creating new address: {}", addressAddDto);
+        log.info("Creating new address: {}", addressAddDto);
         return addressMapper.toAddressDto(addressRepository.save(addressMapper.toAddress(addressAddDto)));
 
     }
 
     @Override
     public AddressDto update(Long id, AddressAddDto addressAddDto) {
-        log.debug("Updating address {}: {}", id, addressAddDto);
+        log.info("Updating address {}: {}", id, addressAddDto);
         Address address=addressRepository.findById(id).orElseThrow(()->new NotFoundException("Address not found with id:" + id));
         if(Objects.nonNull(addressAddDto.getCity())){
             address.setCity(addressAddDto.getCity());
@@ -61,7 +61,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void delete(Long id) {
-        log.debug("Deleting address with ID: {}", id);
+        log.info("Deleting address with ID: {}", id);
         if (!addressRepository.existsById(id)) {
             throw new NotFoundException("Address not found with id: " + id);
         }
@@ -71,7 +71,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressDto> getAllAddresses() {
-        log.debug("Getting all addresses (admin)");
+        log.info("Getting all addresses (admin)");
 
         List<Address> addresses = addressRepository.findAll();
         return addressMapper.toAddressDtoList(addresses);
