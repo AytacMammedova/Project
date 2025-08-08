@@ -15,4 +15,5 @@ public class ProductDto {
     private String image;
     private LocalDate createdDate;
     private LocalDate updatedDate;
+    private Integer subTypeId;
 }

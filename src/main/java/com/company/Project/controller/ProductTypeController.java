@@ -1,6 +1,7 @@
 package com.company.Project.controller;
 
 
+import com.company.Project.model.dto.ProductTypeDto;
 import com.company.Project.model.entity.ProductType;
 import com.company.Project.service.ProductTypeService;
 import lombok.RequiredArgsConstructor;
@@ -15,20 +16,20 @@ import java.util.List;
 public class ProductTypeController {
     private final ProductTypeService productTypeService;
     @GetMapping
-    public List<ProductType> getProductTypeList(){
+    public List<ProductTypeDto> getProductTypeList(){
         return productTypeService.getProductTypeList();
     }
     @GetMapping("/{id}")
-    public ProductType getById(@PathVariable Integer id){
+    public ProductTypeDto getById(@PathVariable Integer id){
         return productTypeService.getById(id);
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductType add(@RequestBody ProductType productType){
+    public ProductTypeDto add(@RequestBody ProductType productType){
         return productTypeService.add(productType);
     }
     @PutMapping("/{id}")
-    public ProductType update(@PathVariable Integer id,@RequestBody ProductType product){
+    public ProductTypeDto update(@PathVariable Integer id,@RequestBody ProductType product){
         return productTypeService.update(id, product);
     }
     @DeleteMapping("/{id}")

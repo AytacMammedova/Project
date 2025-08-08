@@ -17,29 +17,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank(message = "Name field is required")
-    @Size(min = 2, max = 100, message = "Name must be between 2 and 50 characters")
-    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name can only contain letters and spaces")
+    @Column(nullable = false)
     private String name;
-
-//    @NotBlank(message = "Username field is required")
-//    private String username;
-
-    @NotBlank(message = "Email field is required")
-    @Email(message = "Email format is invalid")
-    @Size(max = 100, message = "Email cannot exceed 100 characters")
+    @Column(nullable = false, unique = true)
     private String email;
-
-    @NotBlank(message = "Phone field is required")
-    @Pattern(
-            regexp = "^\\+?994(10|50|51|55|70|77)\\d{7}$",
-            message = "Invalid Azerbaijan mobile number"
-    )
+    @Column(nullable = false)
     private String phone;
-
-    @Past(message = "Date of birth must be in the past")
-    @NotNull(message = "Date of birth field is required")
+    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -59,6 +43,8 @@ public class User {
 
     @Size(min = 6,message = "Password must be at least 6 characters")
     private String password;
+//    @NotBlank(message = "Username field is required")
+//    private String username;
 //    private boolean isAccountNonExpired;
 //    private boolean isAccountNonLocked;
 //    private boolean isCredentialsNonExpired;

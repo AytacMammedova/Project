@@ -2,7 +2,6 @@ package com.company.Project.controller;
 
 import com.company.Project.model.dto.BucketDto;
 import com.company.Project.model.dto.request.BucketAddDto;
-import com.company.Project.model.entity.ProductBucketId;
 import com.company.Project.service.BucketService;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +18,20 @@ public class BucketController {
         return bucketService.getById(userId);
     }
 
-
     @PostMapping("/add-product")
     @ResponseStatus(HttpStatus.CREATED)
     public BucketDto addProductToBucket(@RequestBody BucketAddDto bucketAddDto){
         return bucketService.addProductToBucket(bucketAddDto);
     }
+    @PutMapping("/{bucketId}/products/{productId}/quantity/{quantity}")
+    public BucketDto updateProductQuantity(@PathVariable Long bucketId, @PathVariable Long productId, @PathVariable Integer quantity){
+        return bucketService.updateProductQuantity(bucketId, productId, quantity);
+    }
 
-    @DeleteMapping("/{bucketId}/delete-product/{productBucketId}")
+    @DeleteMapping("/{bucketId}/remove-product/{productBucketId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProductFromBucket(@Parameter(description = "Bucket ID", example = "1")
-                                            @PathVariable Long bucketId,
-                                        @Parameter(description = "Product sequence number in bucket (starts from 1)", example = "2")
-                                            @PathVariable Long productBucketId){
-        bucketService.deleteProductFromBucket(bucketId, productBucketId);
+    public void removeProductFromBucket(@PathVariable Long bucketId, @PathVariable Long productBucketId){
+        bucketService.removeProductFromBucket(bucketId, productBucketId);
     }
 
 

@@ -13,20 +13,21 @@ import lombok.ToString;
 @Entity
 @Table(name = "product_bucket")
 public class ProductBucket {
-    @EmbeddedId
-    private ProductBucketId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "bucket_sequence")
+    private Integer bucketSequence;
     private Integer quantity;
     @Column(name="total_amount")
     private double totalAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("bucketId")
-    @JsonIgnore
+    @JoinColumn(name = "bucket_id", nullable = false)
     private Bucket bucket;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("bucketProductId")
-    @JoinColumn(name = "product_id",referencedColumnName = "id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
 }

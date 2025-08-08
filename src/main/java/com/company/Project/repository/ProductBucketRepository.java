@@ -1,19 +1,29 @@
 package com.company.Project.repository;
 
 import com.company.Project.model.entity.ProductBucket;
-import com.company.Project.model.entity.ProductBucketId;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductBucketRepository extends JpaRepository<ProductBucket,Long> {
-    Optional<ProductBucket> findByBucketIdAndProductId(Long bucketId, Integer productId);
-    @Query("SELECT MAX(pb.id.bucketProductId) FROM ProductBucket pb WHERE pb.bucket.id = :bucketId")
-    Long findMaxBucketProductIdByBucketId(@Param("bucketId") Long bucketId);
-    boolean existsById(ProductBucketId productBucketId);
-    ProductBucket deleteByBucketId(Long bucketId);
+    Optional<ProductBucket> findByBucketIdAndProductId(Long bucketId, Long productId);
+
+    boolean existsByBucketIdAndProductId(Long bucketId, Long productId);
+
+    @Query("SELECT MAX(pb.bucketSequence) FROM ProductBucket pb WHERE pb.bucket.id = :bucketId")
+    Integer findMaxSequenceByBucketId(@Param("bucketId") Long bucketId);
+
+    @Query("SELECT pb FROM ProductBucket pb WHERE pb.bucket.id = :bucketId ORDER BY pb.bucketSequence")
+    List<ProductBucket> findByBucketIdOrderBySequence(@Param("bucketId") Long bucketId);
+
+    @Modifying
+    @Query("DELETE FROM ProductBucket pb WHERE pb.bucket.id = :bucketId")
+    void deleteByBucketId(@Param("bucketId") Long bucketId);
+
 
 
 }

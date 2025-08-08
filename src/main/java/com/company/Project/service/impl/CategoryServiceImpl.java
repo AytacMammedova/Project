@@ -24,33 +24,53 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getCategoryList() {
+        log.info("Getting all categories");
         return categoryMapper.toCategoryDtoList(categoryRepository.findAll());
     }
 
     @Override
     public CategoryDto getById(Integer id) {
+        log.info("Getting category by id: {}", id);
         return categoryMapper.toCategoryDto(categoryRepository.findById(id).orElseThrow(()->new CategoryNotFoundException("No category with id: "+id)));
     }
 
     @Override
     public CategoryDto add(CategoryAddDto categoryAddDto) {
+        log.info("Adding new category: {}", categoryAddDto.getName());
         if(categoryRepository.findByName(categoryAddDto.getName()).isPresent()){
             throw new CategoryAlreadyExistsException("This category already exists");
         }
-        return categoryMapper.toCategoryDto(categoryRepository.save(categoryMapper.toCategory(categoryAddDto)));
+        Category category=categoryMapper.toCategory(categoryAddDto);
+        Category savedCategory=categoryRepository.save(category);
+        log.info("Category added successfully with id: {}", savedCategory.getId());
+        return categoryMapper.toCategoryDto(savedCategory);
     }
 
     @Override
     public CategoryDto update(Integer id, CategoryAddDto categoryAddDto) {
-        Category category=categoryRepository.findById(id).orElseThrow(IllegalStateException::new);
-        if(Objects.nonNull(categoryAddDto.getName())){
-            category.setName(categoryAddDto.getName());
+        log.info("Updating category with id: {}", id);
+
+        Category category=categoryRepository.findById(id).orElseThrow(()->new CategoryNotFoundException("No category with id: "+id));
+        if(Objects.nonNull(categoryAddDto.getName()) && !categoryAddDto.getName().trim().isEmpty()){
+            categoryRepository.findByName(categoryAddDto.getName()).ifPresent(existingCategory -> {
+                        if (!existingCategory.getId().equals(id)) {
+                            throw new CategoryAlreadyExistsException("Category with name '" + categoryAddDto.getName() + "' already exists");
+                        }
+            });
+            category.setName(categoryAddDto.getName().trim());
         }
-        return categoryMapper.toCategoryDto(category);
+        Category savedCategory = categoryRepository.save(category);
+        log.info("Category updated successfully");
+        return categoryMapper.toCategoryDto(savedCategory);
     }
 
     @Override
     public void delete(Integer id) {
+        log.info("Deleting category with id: {}", id);
+        if (!categoryRepository.existsById(id)) {
+            throw new CategoryNotFoundException("No category with id: " + id);
+        }
         categoryRepository.deleteById(id);
+        log.info("Category deleted successfully");
     }
 }

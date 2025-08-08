@@ -1,6 +1,11 @@
 package com.company.Project.model.dto.request;
 
 import com.company.Project.model.entity.Address;
+import com.company.Project.model.entity.Bucket;
+import com.company.Project.model.entity.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,9 +18,32 @@ import java.util.List;
 @AllArgsConstructor
 public class UserAddDto {
 
+    @NotBlank(message = "Name field is required")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 50 characters")
+    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name can only contain letters and spaces")
     private String name;
+
+    @NotBlank(message = "Email field is required")
+    @Email(message = "Email format is invalid")
+    @Size(max = 100, message = "Email cannot exceed 100 characters")
     private String email;
+
+    @NotBlank(message = "Phone field is required")
+    @Pattern(
+            regexp = "^\\+?994(10|50|51|55|70|77)\\d{7}$",
+            message = "Invalid Azerbaijan mobile number"
+    )
     private String phone;
+
+    @Past(message = "Date of birth must be in the past")
+    @NotNull(message = "Date of birth field is required")
     private LocalDate dateOfBirth;
-    private List<AddressAddDto> addresses;
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinTable(name = "user_address",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id"))
+    @JsonManagedReference
+    private List<Address>addresses;
+
 }

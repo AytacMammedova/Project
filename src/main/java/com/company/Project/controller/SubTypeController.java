@@ -1,5 +1,6 @@
 package com.company.Project.controller;
 
+import com.company.Project.model.dto.SubTypeDto;
 import com.company.Project.model.entity.Product;
 import com.company.Project.model.entity.SubType;
 import com.company.Project.service.SubTypeService;
@@ -15,20 +16,20 @@ import java.util.List;
 public class SubTypeController {
     private final SubTypeService subTypeService;
     @GetMapping
-    public List<SubType> getSubTypeList(){
+    public List<SubTypeDto> getSubTypeList(){
         return subTypeService.getSubTypeList();
     }
     @GetMapping("/{id}")
-    public SubType getById(@PathVariable Integer id){
+    public SubTypeDto getById(@PathVariable Integer id){
         return subTypeService.getById(id);
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SubType add(@RequestBody SubType subType){
+    public SubTypeDto add(@RequestBody SubType subType){
         return subTypeService.add(subType);
     }
     @PutMapping("/{id}")
-    public SubType update(@PathVariable Integer id,@RequestBody SubType subType){
+    public SubTypeDto update(@PathVariable Integer id,@RequestBody SubType subType){
         return subTypeService.update(id, subType);
     }
     @DeleteMapping("/{id}")

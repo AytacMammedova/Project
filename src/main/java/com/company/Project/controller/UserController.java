@@ -51,12 +51,12 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/addresses")
-    UserDto addAddressToUser(@PathVariable Long userId,@RequestBody AddressAddDto addressAddDto){
+    UserDto addAddressToUser(@PathVariable Long userId,@Valid @RequestBody AddressAddDto addressAddDto){
         return userService.addAddressToUser(userId, addressAddDto);
     }
 
     @PutMapping("/{userId}/address/{addressId}")
-    public UserDto updateUserAddress(@PathVariable Long userId,@PathVariable Long addressId ,@RequestBody AddressAddDto addressAddDto){
+    public UserDto updateUserAddress(@PathVariable Long userId,@PathVariable Long addressId ,@Valid @RequestBody AddressAddDto addressAddDto){
         return userService.updateUserAddress(userId,addressId,addressAddDto);
     }
 

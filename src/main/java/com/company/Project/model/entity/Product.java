@@ -23,11 +23,13 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
+    @Column(nullable = false)
     private Double price;
-    @Column(name = "stock_quantity")
+    @Column(name = "stock_quantity",nullable = false)
     private Integer stock;
     private String color;
     @Enumerated(EnumType.STRING)
