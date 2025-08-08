@@ -33,8 +33,9 @@ public class Bucket {
     @JsonIgnore
     private User user;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
+    @JsonIgnore
     private Payment payment;
 
     @OneToMany(mappedBy = "bucket",cascade = CascadeType.ALL)

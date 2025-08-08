@@ -1,6 +1,7 @@
 package com.company.Project.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -35,7 +36,7 @@ public class Address {
     private String addressDesc;
 
     @ManyToMany(mappedBy = "addresses",fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonIgnore
     private List<User> users;
 
 

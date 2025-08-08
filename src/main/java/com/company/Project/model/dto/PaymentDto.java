@@ -14,5 +14,6 @@ public class PaymentDto {
     private LocalDate date;
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
-
+    private Long bucketId;
+    private Double amount;
 }

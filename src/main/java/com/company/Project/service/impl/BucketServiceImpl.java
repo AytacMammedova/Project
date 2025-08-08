@@ -153,11 +153,11 @@ public class BucketServiceImpl implements BucketService {
     private static String generateBucketNumber(){
 
         Random random=new Random();
-        StringBuilder accountNumber=new StringBuilder();
+        StringBuilder bucketNumber=new StringBuilder();
         for(int i=0;i<15;i++){
-            accountNumber.append(random.nextInt(10));
+            bucketNumber.append(random.nextInt(10));
         }
-        return accountNumber.toString();
+        return bucketNumber.toString();
 
     }
 }

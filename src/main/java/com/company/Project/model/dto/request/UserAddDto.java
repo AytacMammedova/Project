@@ -6,6 +6,7 @@ import com.company.Project.model.entity.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,11 +40,7 @@ public class UserAddDto {
     @NotNull(message = "Date of birth field is required")
     private LocalDate dateOfBirth;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinTable(name = "user_address",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id"))
-    @JsonManagedReference
+    @Valid
     private List<Address>addresses;
 
 }

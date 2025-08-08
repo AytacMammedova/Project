@@ -15,7 +15,7 @@ public class BucketDto {
     private String bucketNo;
     private LocalDate orderDate;
     private double amount;
-    private PaymentDto payment;
+    private Long paymentId;
 
     private List<ProductBucketDto> productBucketList;
 }

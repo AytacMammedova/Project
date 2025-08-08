@@ -46,6 +46,12 @@ public class GlobalExceptionHandler {
         ErrorResponse response = new ErrorResponse(e.getMessage(), httpStatus, LocalDateTime.now());
         return new ResponseEntity<>(response, httpStatus);
     }
+    @ExceptionHandler(value = {PaymentException.class})
+    public ResponseEntity<Object> handlePaymentException(PaymentException e){
+        HttpStatus httpStatus=HttpStatus.CONFLICT;
+        ErrorResponse response = new ErrorResponse(e.getMessage(), httpStatus, LocalDateTime.now());
+        return new ResponseEntity<>(response, httpStatus);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
@@ -56,17 +62,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    // Handle ConstraintViolationException (for entity-level validation)
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, List<String>>> handleConstraintViolationException(ConstraintViolationException ex) {
-        System.out.println("=== ConstraintViolationException CAUGHT! ===");
-        List<String> errors = ex.getConstraintViolations()
-                .stream()
-                .map(ConstraintViolation::getMessage)
-                .collect(Collectors.toList());
-        System.out.println("Constraint violation errors: " + errors);
-        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
+//     Handle ConstraintViolationException (for entity-level validation)
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    public ResponseEntity<Map<String, List<String>>> handleConstraintViolationException(ConstraintViolationException ex) {
+//        System.out.println("=== ConstraintViolationException CAUGHT! ===");
+//        List<String> errors = ex.getConstraintViolations()
+//                .stream()
+//                .map(ConstraintViolation::getMessage)
+//                .collect(Collectors.toList());
+//        System.out.println("Constraint violation errors: " + errors);
+//        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+//    }
 
     private Map<String, List<String>> getErrorsMap(List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();
