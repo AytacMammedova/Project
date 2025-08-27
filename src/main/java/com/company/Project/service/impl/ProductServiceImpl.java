@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto getById(Integer id) {
         log.info("Getting product by ID: {}", id);
-        return productMapper.toProductDto(productRepository.findById(id).orElseThrow(NullPointerException::new));
+        return productMapper.toProductDto(productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found")));
     }
 
     @Override
