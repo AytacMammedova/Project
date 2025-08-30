@@ -5,10 +5,7 @@ import com.company.Project.mapper.BucketMapper;
 import com.company.Project.model.dto.BucketDto;
 import com.company.Project.model.dto.request.BucketAddDto;
 import com.company.Project.model.entity.*;
-import com.company.Project.repository.BucketRepository;
-import com.company.Project.repository.ProductBucketRepository;
-import com.company.Project.repository.ProductRepository;
-import com.company.Project.repository.UserRepository;
+import com.company.Project.repository.*;
 import com.company.Project.service.BucketService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +27,7 @@ public class BucketServiceImpl implements BucketService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final ProductBucketRepository productBucketRepository;
+    private final ProductSizeRepository productSizeRepository;
 
     @Override
     public BucketDto getById(Long userId) {
@@ -48,8 +46,13 @@ public class BucketServiceImpl implements BucketService {
                 .orElseThrow(()->new UserNotFoundException("No user with id:"+bucketAddDto.getUserId()));
         Product product=productRepository.findById(bucketAddDto.getProductId())
                 .orElseThrow(()->new ProductNotFoundException("No product with id: "+bucketAddDto.getProductId()));
-        if (product.getStock() < bucketAddDto.getQuantity()) {
-            throw new OutOfStockException("Insufficient stock. Available: " + product.getStock() + ", Requested: " + bucketAddDto.getQuantity());
+        ProductSize productSize = productSizeRepository.findByProductIdAndSizeName(
+                        bucketAddDto.getProductId(), bucketAddDto.getSizeName())
+                .orElseThrow(() -> new RuntimeException("Size " + bucketAddDto.getSizeName() + " not available for this product"));
+
+        if (productSize.getStockQuantity() < bucketAddDto.getQuantity()) {
+            throw new OutOfStockException("Insufficient stock for size " + bucketAddDto.getSizeName() +
+                    ". Available: " + productSize.getStockQuantity() + ", Requested: " + bucketAddDto.getQuantity());
         }
         Optional<Bucket> optionalBucket=bucketRepository.findBucketByUserId(bucketAddDto.getUserId());
         Bucket bucket;

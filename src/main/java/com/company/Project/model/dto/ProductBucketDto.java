@@ -11,5 +11,6 @@ public class ProductBucketDto {
     private Long bucketProductId;
     private Integer quantity;
     private double totalAmount;
+    private String sizeName;
     private ProductDto product;
 }

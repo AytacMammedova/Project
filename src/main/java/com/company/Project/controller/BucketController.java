@@ -4,6 +4,7 @@ import com.company.Project.model.dto.BucketDto;
 import com.company.Project.model.dto.request.BucketAddDto;
 import com.company.Project.service.BucketService;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class BucketController {
 
     @PostMapping("/add-product")
     @ResponseStatus(HttpStatus.CREATED)
-    public BucketDto addProductToBucket(@RequestBody BucketAddDto bucketAddDto){
+    public BucketDto addProductToBucket(@Valid @RequestBody BucketAddDto bucketAddDto){
         return bucketService.addProductToBucket(bucketAddDto);
     }
     @PutMapping("/{bucketId}/products/{productId}/quantity/{quantity}")

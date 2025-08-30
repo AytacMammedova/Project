@@ -21,6 +21,8 @@ public class ProductBucket {
     private Integer quantity;
     @Column(name="total_amount")
     private double totalAmount;
+    @Column(name = "size_name")
+    private String sizeName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bucket_id", nullable = false)
