@@ -3,6 +3,7 @@ package com.company.Project.service;
 import com.company.Project.model.dto.AddressDto;
 import com.company.Project.model.dto.UserDto;
 import com.company.Project.model.dto.request.AddressAddDto;
+import com.company.Project.model.dto.request.PasswordChangeDto;
 import com.company.Project.model.dto.request.UserAddDto;
 import com.company.Project.model.dto.request.UserUpdateRequest;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public interface UserService {
     UserDto addAddressToUser(Long userId,AddressAddDto addressAddDto);
     UserDto updateUserAddress(Long userId,Long addressId,AddressAddDto addressAddDto);
     void deleteUserAddress(Long userId,Long addressId);
+
+    void changePassword(PasswordChangeDto passwordChangeDto);
+
 
 
 }

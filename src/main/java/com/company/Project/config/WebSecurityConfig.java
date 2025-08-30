@@ -55,28 +55,37 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
+                        // PUBLIC ENDPOINTS - No authentication required
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                        // PUBLIC PRODUCT VIEWING
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/productTypes/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/subtypes/**").permitAll()
 
-                        // Admin only endpoints
+                        // ADMIN ONLY ENDPOINTS - Require ADMIN role
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/categories/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/categories/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/productTypes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/productTypes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/productTypes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/subtypes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/subtypes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/subtypes/**").hasRole("ADMIN")
 
-                        // User endpoints (require authentication)
+                        // USER ENDPOINTS - Require authentication (USER or ADMIN)
                         .requestMatchers("/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/buckets/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/payments/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/addresses/**").hasAnyRole("USER", "ADMIN")
 
+                        // ALL OTHER ENDPOINTS - Require authentication
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))

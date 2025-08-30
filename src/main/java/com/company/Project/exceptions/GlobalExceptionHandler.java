@@ -61,6 +61,12 @@ public class GlobalExceptionHandler {
         System.out.println("Validation errors: " + errors);
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(value = {PasswordValidationException.class})
+    public ResponseEntity<Object> handlePasswordValidationException(PasswordValidationException e){
+        HttpStatus httpStatus=HttpStatus.BAD_REQUEST;
+        ErrorResponse response = new ErrorResponse(e.getMessage(), httpStatus, LocalDateTime.now());
+        return new ResponseEntity<>(response, httpStatus);
+    }
 
 //     Handle ConstraintViolationException (for entity-level validation)
 //    @ExceptionHandler(ConstraintViolationException.class)

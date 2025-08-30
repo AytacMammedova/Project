@@ -14,11 +14,11 @@ public class SubType {
     private Integer id;
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_type_id")
     private ProductType productType;
 
 
-    @OneToMany(mappedBy = "subType",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subType",cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.LAZY)
     private List<Product>products;
 }

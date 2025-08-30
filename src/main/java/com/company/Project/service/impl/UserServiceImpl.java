@@ -1,12 +1,14 @@
 package com.company.Project.service.impl;
 
 import com.company.Project.exceptions.AddressOwnershipException;
+import com.company.Project.exceptions.PasswordValidationException;
 import com.company.Project.exceptions.UserNotFoundException;
 import com.company.Project.mapper.AddressMapper;
 import com.company.Project.mapper.UserMapper;
 import com.company.Project.model.dto.AddressDto;
 import com.company.Project.model.dto.UserDto;
 import com.company.Project.model.dto.request.AddressAddDto;
+import com.company.Project.model.dto.request.PasswordChangeDto;
 import com.company.Project.model.dto.request.UserAddDto;
 import com.company.Project.model.dto.request.UserUpdateRequest;
 import com.company.Project.model.entity.Address;
@@ -18,6 +20,8 @@ import com.company.Project.service.AddressService;
 import com.company.Project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final AddressMapper addressMapper;
     private final AddressService addressService;
     private  final AddressRepository addressRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -136,6 +141,31 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("No user with id: " + userId);
         }
         return addressService.getAddressesByUserId(userId);
+    }
+    @Override
+    public void changePassword(PasswordChangeDto passwordChangeDto) {
+        // emailini aliriq
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userEmail));
+
+        if (!passwordEncoder.matches(passwordChangeDto.getCurrentPassword(), user.getPassword())) {
+            throw new PasswordValidationException("Current password is incorrect");
+        }
+
+        if (!passwordChangeDto.getNewPassword().equals(passwordChangeDto.getConfirmPassword())) {
+            throw new PasswordValidationException("New password and confirmation do not match");
+        }
+
+        if (passwordEncoder.matches(passwordChangeDto.getNewPassword(), user.getPassword())) {
+            throw new PasswordValidationException("New password must be different from current password");
+        }
+        
+        user.setPassword(passwordEncoder.encode(passwordChangeDto.getNewPassword()));
+        userRepository.save(user);
+
+        log.info("Password changed successfully for user: {}", userEmail);
     }
 
 

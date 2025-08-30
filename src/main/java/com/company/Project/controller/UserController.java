@@ -3,6 +3,7 @@ package com.company.Project.controller;
 import com.company.Project.model.dto.AddressDto;
 import com.company.Project.model.dto.UserDto;
 import com.company.Project.model.dto.request.AddressAddDto;
+import com.company.Project.model.dto.request.PasswordChangeDto;
 import com.company.Project.model.dto.request.UserAddDto;
 import com.company.Project.model.dto.request.UserUpdateRequest;
 import com.company.Project.service.UserService;
@@ -43,8 +44,6 @@ public class UserController {
         userService.delete(id);
     }
 
-
-
     @GetMapping("/{userId}/addresses")
     List<AddressDto> getUserAddresses(@PathVariable Long userId){
         return userService.getUserAddresses(userId);
@@ -63,6 +62,12 @@ public class UserController {
     @DeleteMapping("/{userId}/addresses/{addressId}")
     void deleteUserAddress(@PathVariable Long userId,@PathVariable Long addressId){
         userService.deleteUserAddress(userId, addressId);
+    }
+
+    @PutMapping("/change-password")
+    public String changePassword(@Valid @RequestBody PasswordChangeDto passwordChangeDto) {
+        userService.changePassword(passwordChangeDto);
+        return "Password changed successfully. Please login again with your new password.";
     }
 
 

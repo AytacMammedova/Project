@@ -15,11 +15,11 @@ public class ProductType {
     private Integer id;
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "productType",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productType",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<SubType>subTypes;
 
 }
