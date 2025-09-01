@@ -58,6 +58,8 @@ public class WebSecurityConfig {
                         // PUBLIC ENDPOINTS - No authentication required
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/size-guide/**").permitAll()
+
 
                         // PUBLIC PRODUCT VIEWING
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()

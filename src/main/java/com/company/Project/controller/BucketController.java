@@ -24,9 +24,9 @@ public class BucketController {
     public BucketDto addProductToBucket(@Valid @RequestBody BucketAddDto bucketAddDto){
         return bucketService.addProductToBucket(bucketAddDto);
     }
-    @PutMapping("/{bucketId}/products/{productId}/quantity/{quantity}")
-    public BucketDto updateProductQuantity(@PathVariable Long bucketId, @PathVariable Long productId, @PathVariable Integer quantity){
-        return bucketService.updateProductQuantity(bucketId, productId, quantity);
+    @PutMapping("/{bucketId}/products/{productId}/quantity/{quantity}/sizeName/{sizeName}")
+    public BucketDto updateProductQuantity(@PathVariable Long bucketId, @PathVariable Long productId, @PathVariable Integer quantity,@PathVariable String sizeName){
+        return bucketService.updateProductQuantity(bucketId, productId, quantity,sizeName);
     }
 
     @DeleteMapping("/{bucketId}/remove-product/{productBucketId}")

@@ -26,6 +26,7 @@ public class Bucket {
     @Column(name="order_date")
     private LocalDate orderDate;
     private double amount;
+    private Boolean isActive;
 
 
     @OneToOne

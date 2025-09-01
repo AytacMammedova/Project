@@ -54,6 +54,9 @@ public class BucketServiceImpl implements BucketService {
             throw new OutOfStockException("Insufficient stock for size " + bucketAddDto.getSizeName() +
                     ". Available: " + productSize.getStockQuantity() + ", Requested: " + bucketAddDto.getQuantity());
         }
+        if (product.getStock() < bucketAddDto.getQuantity()) {
+            throw new OutOfStockException("Insufficient overall stock. Available: " + product.getStock() + ", Requested: " + bucketAddDto.getQuantity());
+        }
         Optional<Bucket> optionalBucket=bucketRepository.findBucketByUserId(bucketAddDto.getUserId());
         Bucket bucket;
         if(optionalBucket.isPresent()) {
@@ -63,6 +66,7 @@ public class BucketServiceImpl implements BucketService {
             bucket.setBucketNo(generateBucketNumber());
             bucket.setOrderDate(LocalDate.now());
             bucket.setAmount(0);
+            bucket.setIsActive(true);
             bucket.setUser(user);
             bucketRepository.save(bucket);
         }
@@ -87,9 +91,15 @@ public class BucketServiceImpl implements BucketService {
             productBucket.setBucket(bucket);
             productBucket.setProduct(product);
             productBucket.setQuantity(bucketAddDto.getQuantity());
+            productBucket.setSizeName(bucketAddDto.getSizeName());
             productBucket.setTotalAmount(product.getPrice()*bucketAddDto.getQuantity());
             productBucketRepository.save(productBucket);
         }
+        productSize.setStockQuantity(productSize.getStockQuantity() - bucketAddDto.getQuantity());
+        productSizeRepository.save(productSize);
+
+        product.setStock(product.getStock() - bucketAddDto.getQuantity());
+        productRepository.save(product);
         totalAmount(bucket.getId());
         log.info("Product added to bucket successfully");
         return bucketMapper.toBucketDto(bucket);
@@ -97,7 +107,7 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    public BucketDto updateProductQuantity(Long bucketId, Long productId, Integer newQuantity) {
+    public BucketDto updateProductQuantity(Long bucketId, Long productId, Integer newQuantity,String sizeName) {
         log.info("Updating product {} quantity to {} in bucket {}", productId, newQuantity, bucketId);
 
         Bucket bucket = bucketRepository.findById(bucketId)
@@ -112,6 +122,7 @@ public class BucketServiceImpl implements BucketService {
         }
 
         productBucket.setQuantity(newQuantity);
+        productBucket.setSizeName(sizeName);
         productBucket.setTotalAmount(product.getPrice() * newQuantity);
         productBucketRepository.save(productBucket);
 
@@ -132,6 +143,7 @@ public class BucketServiceImpl implements BucketService {
         totalAmount(bucketId);
         log.info("Product deleted from bucket ID: {}", bucketId);
     }
+
 
     @Override
     @Transactional
