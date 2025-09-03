@@ -102,6 +102,7 @@ public class ProductServiceImpl implements ProductService {
         log.info("Updating product: {}", productAddDto.getName());
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
         Product newProduct = productMapper.updateProduct(productAddDto, product);
+        newProduct.setUpdatedDate(LocalDate.now());
         Product savedProduct = productRepository.save(newProduct);
         log.info("Product updated successfully");
         return productMapper.toProductDto(savedProduct);

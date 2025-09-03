@@ -33,6 +33,8 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     @Override
     @Transactional
     public String resetPassword(ResetPasswordRequestDto request) {
+        cleanupExpiredTokens();
+
         if (request.getToken() == null || request.getToken().trim().isEmpty()) {
             return generateAndSendToken(request.getEmail());
         }
@@ -48,6 +50,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
             existingToken.get().setUsed(true);
             tokenRepository.save(existingToken.get());
         }
+
         String resetToken = generateResetToken();
         LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(EXPIRY_MINUTES);
 
@@ -61,7 +64,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         log.info("Use this code to reset your password");
         log.info("==========================================");
 
-        return "Reset code sent! Check console for your 6-digit code. It expires in " + EXPIRY_MINUTES + " minutes.";
+        return "Reset code sent! Check your console/email for your 6-digit code. It expires in " + EXPIRY_MINUTES + " minutes.";
     }
 
     private String resetPasswordWithToken(ResetPasswordRequestDto request) {
@@ -73,18 +76,29 @@ public class PasswordResetServiceImpl implements PasswordResetService {
             throw new PasswordValidationException("Password confirmation is required");
         }
 
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new PasswordValidationException("New password and confirmation do not match");
+        }
+
+        if (request.getNewPassword().length() < 6) {
+            throw new PasswordValidationException("Password must be at least 6 characters long");
+        }
+
         PasswordResetToken resetToken = tokenRepository.findByTokenAndUsedFalse(request.getToken())
                 .orElseThrow(() -> new PasswordValidationException("Invalid or expired reset code"));
 
         if (resetToken.isExpired()) {
+            resetToken.setUsed(true);
+            tokenRepository.save(resetToken);
             throw new PasswordValidationException("Reset code has expired. Please request a new one.");
         }
 
-        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-            throw new PasswordValidationException("New password and confirmation do not match");
-        }
         User user = userRepository.findByEmail(resetToken.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new PasswordValidationException("New password must be different from current password");
+        }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
@@ -106,4 +120,15 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
         return token.toString();
     }
+
+    @Transactional
+    public void cleanupExpiredTokens() {
+        try {
+            tokenRepository.deleteExpiredAndUsedTokens(LocalDateTime.now());
+            log.debug("Cleaned up expired and used password reset tokens");
+        } catch (Exception e) {
+            log.error("Error cleaning up expired tokens: {}", e.getMessage());
+        }
+    }
 }
+

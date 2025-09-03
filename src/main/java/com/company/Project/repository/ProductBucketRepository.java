@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductBucketRepository extends JpaRepository<ProductBucket,Long> {
-    Optional<ProductBucket> findByBucketIdAndProductId(Long bucketId, Long productId);
+    List<ProductBucket> findByBucketIdAndProductId(Long bucketId, Long productId);
 
     boolean existsByBucketIdAndProductId(Long bucketId, Long productId);
 
@@ -25,5 +25,8 @@ public interface ProductBucketRepository extends JpaRepository<ProductBucket,Lon
     void deleteByBucketId(@Param("bucketId") Long bucketId);
 
 
+    @Query("SELECT pb FROM ProductBucket pb WHERE pb.bucket.id = :bucketId AND pb.product.id = :productId AND pb.sizeName = :sizeName")
+    Optional<ProductBucket> findByBucketIdAndProductIdAndSize(@Param("bucketId") Long bucketId, @Param("productId") Long productId, @Param("sizeName") String sizeName);
+    
 
 }

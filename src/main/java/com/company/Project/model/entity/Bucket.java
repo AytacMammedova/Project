@@ -26,7 +26,6 @@ public class Bucket {
     @Column(name="order_date")
     private LocalDate orderDate;
     private double amount;
-    private Boolean isActive;
 
 
     @OneToOne
@@ -41,5 +40,4 @@ public class Bucket {
 
     @OneToMany(mappedBy = "bucket",cascade = CascadeType.ALL)
     private List<ProductBucket>productBucketList=new ArrayList<>();
-    //total amount sum ile etmek
 }

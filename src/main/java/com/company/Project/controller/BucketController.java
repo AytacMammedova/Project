@@ -1,6 +1,7 @@
 package com.company.Project.controller;
 
 import com.company.Project.model.dto.BucketDto;
+import com.company.Project.model.dto.OrderHistoryDto;
 import com.company.Project.model.dto.request.BucketAddDto;
 import com.company.Project.service.BucketService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -8,6 +9,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/buckets")
@@ -40,6 +43,11 @@ public class BucketController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void clearBucket(@PathVariable Long bucketId){
         bucketService.clearBucket(bucketId);
+    }
+
+    @GetMapping("/user/{userId}/order-history")
+    public List<OrderHistoryDto> getOrderHistory(@PathVariable Long userId) {
+        return bucketService.getOrderHistory(userId);
     }
 
 
