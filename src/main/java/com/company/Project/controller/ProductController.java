@@ -6,6 +6,7 @@ import com.company.Project.model.dto.request.ProductAddDto;
 import com.company.Project.model.entity.Product;
 import com.company.Project.model.entity.ProductSearchCriteria;
 import com.company.Project.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,11 +60,11 @@ public class ProductController {
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDto add(@RequestBody ProductAddDto productAddDto){
+    public ProductDto add(@Valid @RequestBody ProductAddDto productAddDto){
         return productService.add(productAddDto);
     }
     @PutMapping("/{id}")
-    public ProductDto update(@PathVariable Integer id,@RequestBody ProductAddDto productAddDto){
+    public ProductDto update(@PathVariable Integer id,@Valid @RequestBody ProductAddDto productAddDto){
         return productService.update(id, productAddDto);
     }
     @DeleteMapping("/{id}")

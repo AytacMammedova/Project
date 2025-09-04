@@ -167,6 +167,14 @@ public class UserServiceImpl implements UserService {
 
         log.info("Password changed successfully for user: {}", userEmail);
     }
+    @Override
+    public UserDto getByEmail(String email) {
+        log.info("Getting user by email: {}", email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("No user with email: " + email));
+        return userMapper.toUserDto(user);
+    }
+
 
 
 }

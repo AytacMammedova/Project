@@ -26,6 +26,7 @@ public interface UserService {
     void deleteUserAddress(Long userId,Long addressId);
 
     void changePassword(PasswordChangeDto passwordChangeDto);
+    UserDto getByEmail(String email);
 
 
 
