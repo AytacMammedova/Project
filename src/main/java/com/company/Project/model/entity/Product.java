@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 
@@ -36,9 +35,6 @@ public class Product {
     private Gender gender;
     @Column(name = "image_url")
     private String image;
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDate createdDate;
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDate updatedDate;

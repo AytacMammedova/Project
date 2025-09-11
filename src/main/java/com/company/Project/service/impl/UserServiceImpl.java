@@ -1,5 +1,6 @@
 package com.company.Project.service.impl;
 
+import com.company.Project.client.TransactionServiceClient;
 import com.company.Project.exceptions.AddressOwnershipException;
 import com.company.Project.exceptions.PasswordValidationException;
 import com.company.Project.exceptions.UserNotFoundException;
@@ -7,10 +8,8 @@ import com.company.Project.mapper.AddressMapper;
 import com.company.Project.mapper.UserMapper;
 import com.company.Project.model.dto.AddressDto;
 import com.company.Project.model.dto.UserDto;
-import com.company.Project.model.dto.request.AddressAddDto;
-import com.company.Project.model.dto.request.PasswordChangeDto;
-import com.company.Project.model.dto.request.UserAddDto;
-import com.company.Project.model.dto.request.UserUpdateRequest;
+import com.company.Project.model.dto.request.*;
+import com.company.Project.model.dto.response.CustomerResponse;
 import com.company.Project.model.entity.Address;
 import com.company.Project.model.entity.User;
 import com.company.Project.repository.AddressRepository;
@@ -38,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final AddressService addressService;
     private  final AddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TransactionServiceClient transactionServiceClient; // ADD THIS
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -56,10 +56,37 @@ public class UserServiceImpl implements UserService {
         log.info("Creating new user: {}", userAddDto.getName());
         User user=userMapper.toUser(userAddDto);
         user.setRole(roleRepository.findByName("USER"));
-        User createdUser=userRepository.save(user);
-        log.info("Created user with ID: {} and name: {}", createdUser.getId(), createdUser.getName());
-        return userMapper.toUserDto(createdUser);
+        User savedUser = userRepository.save(user);
+
+        // Transaction servisində customer yaratmaq
+        try {
+            CustomerCreateRequest customerRequest = CustomerCreateRequest.builder()
+                    .name(savedUser.getName())
+                    .email(savedUser.getEmail())
+                    .phone(savedUser.getPhone())
+                    .dateOfBirth(savedUser.getDateOfBirth())
+                    .ecommerceUserId(savedUser.getId())
+                    .build();
+
+            CustomerResponse customerResponse = transactionServiceClient.createCustomer(customerRequest);
+            log.info("Customer created in transaction service: {}", customerResponse.getCustomerId());
+
+        } catch (Exception e) {
+            log.info("Failed to create customer in transaction service: {}", e.getMessage());
+            // Bu xəta critical deyil, davam edə bilərik
+        }
+
+        return userMapper.toUserDto(savedUser);
     }
+//    @Override
+//    public UserDto add(UserAddDto userAddDto) {
+//        log.info("Creating new user: {}", userAddDto.getName());
+//        User user=userMapper.toUser(userAddDto);
+//        user.setRole(roleRepository.findByName("USER"));
+//        User createdUser=userRepository.save(user);
+//        log.info("Created user with ID: {} and name: {}", createdUser.getId(), createdUser.getName());
+//        return userMapper.toUserDto(createdUser);
+//    }
 
     @Override
     public UserDto update(Long id, UserUpdateRequest userUpdateRequest) {

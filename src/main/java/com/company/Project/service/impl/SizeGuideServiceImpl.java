@@ -18,7 +18,7 @@ public class SizeGuideServiceImpl implements SizeGuideService {
     private final ProductSizeService productSizeService;
 
     @Override
-    public SizeRecommendationDto findMySize(Integer productId, SizeMeasurementDto measurementDto) {
+    public SizeRecommendationDto findMySize(Long productId, SizeMeasurementDto measurementDto) {
         String recommendedSize = calculateSize(measurementDto);
 
         boolean inStock = productSizeService.isAvailable(productId, recommendedSize, 1);

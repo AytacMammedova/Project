@@ -1,3 +1,4 @@
+
 package com.company.Project.controller;
 
 import com.company.Project.model.dto.PaymentDto;
@@ -42,3 +43,29 @@ public class PaymentController {
         return paymentService.refundPayment(id);
     }
 }
+
+//package com.company.Project.controller;
+//
+//import com.company.Project.model.dto.PaymentDto;
+//import com.company.Project.model.dto.TransactionDto;
+//import com.company.Project.service.PaymentService;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.web.bind.annotation.*;
+//
+//@RestController
+//@RequestMapping("/payments")
+//@RequiredArgsConstructor
+//public class PaymentController {
+//
+//    private final PaymentService paymentService;
+//
+//    @PostMapping
+//    public PaymentDto createPayment(@RequestParam Long paymentId) {
+//        return paymentService.completePayment(paymentId);
+//    }
+//
+//    @PutMapping("/{paymentId}/confirm")
+//    public PaymentDto refundPayment(@PathVariable Long paymentId) {
+//        return paymentService.refundPayment(paymentId);
+//    }
+//}

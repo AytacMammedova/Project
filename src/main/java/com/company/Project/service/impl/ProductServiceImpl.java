@@ -70,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto getById(Integer id) {
+    public ProductDto getById(Long id) {
         log.info("Getting product by ID: {}", id);
         return productMapper.toProductDto(productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found")));
     }
@@ -84,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto add(ProductAddDto productAddDto) {
         log.info("Adding new product: {}", productAddDto.getName());
         Product product = productMapper.toProduct(productAddDto);
-        product.setCreatedDate(LocalDate.now());
+
 
         if (productAddDto.getSubTypeId() != null) {
             SubType subType = subTypeRepository.findById(productAddDto.getSubTypeId())
@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto update(Integer id,ProductAddDto productAddDto) {
+    public ProductDto update(Long id,ProductAddDto productAddDto) {
         log.info("Updating product: {}", productAddDto.getName());
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
         Product newProduct = productMapper.updateProduct(productAddDto, product);
@@ -109,7 +109,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         log.info("Deleting product with ID: {}", id);
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
         productRepository.delete(product);

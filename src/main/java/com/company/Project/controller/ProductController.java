@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductDto getById(@PathVariable Integer id){
+    public ProductDto getById(@PathVariable Long id){
         return productService.getById(id);
     }
     @GetMapping("/subtypeId/{subtypeId}")
@@ -64,12 +64,12 @@ public class ProductController {
         return productService.add(productAddDto);
     }
     @PutMapping("/{id}")
-    public ProductDto update(@PathVariable Integer id,@Valid @RequestBody ProductAddDto productAddDto){
+    public ProductDto update(@PathVariable Long id,@Valid @RequestBody ProductAddDto productAddDto){
         return productService.update(id, productAddDto);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer id){
+    public void delete(@PathVariable Long id){
         productService.delete(id);
     }
 }

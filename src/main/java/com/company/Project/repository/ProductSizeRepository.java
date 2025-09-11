@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public interface ProductSizeRepository extends JpaRepository<ProductSize, Long> {
 
-    List<ProductSize> findByProductIdAndIsAvailable(Integer productId, Boolean isAvailable);
+    List<ProductSize> findByProductIdAndIsAvailable(Long productId, Boolean isAvailable);
 
-    Optional<ProductSize> findByProductIdAndSizeName(Integer productId, String sizeName);
+    Optional<ProductSize> findByProductIdAndSizeName(Long productId, String sizeName);
 
     @Query("SELECT SUM(ps.stockQuantity) FROM ProductSize ps WHERE ps.productId = :productId")
     Integer getTotalStockForProduct(@Param("productId") Integer productId);
 
     @Query("SELECT ps FROM ProductSize ps WHERE ps.productId = :productId AND ps.stockQuantity > 0")
-    List<ProductSize> findAvailableStockByProductId(@Param("productId") Integer productId);
+    List<ProductSize> findAvailableStockByProductId(@Param("productId") Long productId);
 }

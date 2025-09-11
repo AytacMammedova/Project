@@ -16,7 +16,7 @@ public class ProductSize {
     private Long id;
 
     @Column(name = "product_id", nullable = false)
-    private Integer productId; // References products.id
+    private Long productId; // References products.id
 
     @Column(name = "size_name", nullable = false)
     private String sizeName; // "XS", "S", "M", "L", "XL"
@@ -24,8 +24,6 @@ public class ProductSize {
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity; // Stock for this specific size
 
-    @Column(name = "is_comfort_fit")
-    private Boolean isComfortFit = false;
 
     @Column(name = "is_available")
     private Boolean isAvailable = true;
@@ -34,4 +32,9 @@ public class ProductSize {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private Product product;
+
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
+        this.isAvailable = (stockQuantity != null && stockQuantity > 0);
+    }
 }

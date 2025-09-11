@@ -14,9 +14,9 @@ import java.util.List;
 public interface ProductService {
     List<ProductDto> getProductsList();
     Page<ProductDto> searchProducts(ProductSearchCriteria criteria, Pageable pageable);
-    ProductDto getById(Integer id);
+    ProductDto getById(Long id);
     List<ProductDto>getProductsBySubtypeId(Integer subtypeId);
     ProductDto add(ProductAddDto productAddDto);
-    ProductDto update(Integer id,ProductAddDto productAddDto);
-    void delete(Integer id);
+    ProductDto update(Long id,ProductAddDto productAddDto);
+    void delete(Long id);
 }

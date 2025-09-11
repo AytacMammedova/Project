@@ -1,6 +1,7 @@
 package com.company.Project.model.dto;
 
 import com.company.Project.model.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import java.time.LocalDate;
 
@@ -13,7 +14,7 @@ public class ProductDto {
     private String color;
     private Gender gender;
     private String image;
-    private LocalDate createdDate;
     private LocalDate updatedDate;
+    @JsonIgnore
     private Integer subTypeId;
 }

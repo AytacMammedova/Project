@@ -23,11 +23,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        boolean shouldSkip = path.startsWith("/images/") ||
+                path.startsWith("/css/") ||
+                path.startsWith("/js/") ||
+                path.startsWith("/assets/") ||
+                path.equals("/favicon.ico");
+
+        if (shouldSkip) {
+            log.info("JWT Filter COMPLETELY SKIPPED for: {}", path);
+        }
+
+        return shouldSkip;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;

@@ -9,9 +9,14 @@ import java.util.List;
 
 @Mapper(componentModel ="spring")
 public interface PaymentMapper {
-    @Mapping(source = "bucket.id", target = "bucketId")
-    @Mapping(source = "bucket.amount", target = "amount")
-    PaymentDto toPaymentDto(Payment payment);
+//    @Mapping(source = "originalBucketId", target = "bucketId")
+//    @Mapping(source = "amount", target = "amount")
+//    PaymentDto toPaymentDto(Payment payment);
     List<PaymentDto>toPaymentDtoList(List<Payment>paymentList);
+
+
+    @Mapping(source = "bucket.id", target = "bucketId")
+    @Mapping(source = "amount", target = "amount")
+    PaymentDto toPaymentDto(Payment payment);
 
 }

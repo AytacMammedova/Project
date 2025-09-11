@@ -2,6 +2,7 @@ package com.company.Project.service;
 
 import com.company.Project.model.PaymentMethod;
 import com.company.Project.model.dto.PaymentDto;
+import com.company.Project.model.dto.TransactionDto;
 import com.company.Project.model.dto.request.PaymentAddDto;
 import org.springframework.stereotype.Service;
 

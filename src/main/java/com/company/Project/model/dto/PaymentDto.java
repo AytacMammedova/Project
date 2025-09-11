@@ -9,11 +9,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 @Data
 public class PaymentDto {
-
+    private Long id;
     private String  paymentNo;
     private LocalDate date;
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
     private Long bucketId;
     private Double amount;
+    private String transactionId;
+    private String failureReason;
 }

@@ -1,17 +1,12 @@
 package com.company.Project.mapper;
 
-import com.company.Project.model.dto.BucketDto;
 import com.company.Project.model.dto.ProductBucketDto;
-import com.company.Project.model.entity.Bucket;
 import com.company.Project.model.entity.ProductBucket;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel ="spring")
-public interface BucketMapper {
-    @Mapping(source = "payment.id", target = "paymentId")
-    BucketDto toBucketDto(Bucket bucket);
-
+@Mapper(componentModel = "spring", uses = {ProductMapper.class})
+public interface ProductBucketMapper {
     @Mapping(source = "id", target = "bucketProductId")
     ProductBucketDto toProductBucketDto(ProductBucket productBucket);
 }

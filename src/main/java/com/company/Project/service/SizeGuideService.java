@@ -8,6 +8,6 @@ import java.util.List;
 
 @Service
 public interface SizeGuideService {
-    public SizeRecommendationDto findMySize(Integer productId,SizeMeasurementDto measurementDto);
+    public SizeRecommendationDto findMySize(Long productId,SizeMeasurementDto measurementDto);
     List<String> getHowToMeasure(String jewelryType);
 }

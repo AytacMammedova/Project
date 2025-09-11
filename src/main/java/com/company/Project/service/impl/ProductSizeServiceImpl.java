@@ -21,14 +21,14 @@ public class ProductSizeServiceImpl implements ProductSizeService {
     private final ProductSizeMapper productSizeMapper;
 
     @Override
-    public List<ProductSizeDto> getAvailableSizes(Integer productId) {
+    public List<ProductSizeDto> getAvailableSizes(Long productId) {
         log.info("Getting available sizes for product: {}", productId);
         List<ProductSize> availableSizes = productSizeRepository.findAvailableStockByProductId(productId);
         return productSizeMapper.toProductSizeDtoList(availableSizes);
     }
 
     @Override
-    public boolean isAvailable(Integer productId, String sizeName, Integer quantity) {
+    public boolean isAvailable(Long productId, String sizeName, Integer quantity) {
         ProductSize productSize = productSizeRepository.findByProductIdAndSizeName(productId, sizeName)
                 .orElse(null);
 
@@ -40,7 +40,7 @@ public class ProductSizeServiceImpl implements ProductSizeService {
     }
 
     @Override
-    public ProductSize findByProductAndSize(Integer productId, String sizeName) {
+    public ProductSize findByProductAndSize(Long productId, String sizeName) {
         return productSizeRepository.findByProductIdAndSizeName(productId, sizeName)
                 .orElseThrow(() -> new ProductNotFoundException("Size " + sizeName + " not found for product " + productId));
     }

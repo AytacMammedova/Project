@@ -69,7 +69,6 @@ class ProductControllerTest {
         productDto1.setColor("Gold");
         productDto1.setGender(Gender.UNISEX);
         productDto1.setImage("bracelet1.jpg");
-        productDto1.setCreatedDate(LocalDate.now());
         productDto1.setSubTypeId(1);
 
         productDto2 = new ProductDto();
@@ -80,7 +79,6 @@ class ProductControllerTest {
         productDto2.setColor("Gold");
         productDto2.setGender(Gender.FEMALE);
         productDto2.setImage("bracelet2.jpg");
-        productDto2.setCreatedDate(LocalDate.now());
         productDto2.setSubTypeId(1);
 
         productAddDto = new ProductAddDto();
@@ -119,7 +117,7 @@ class ProductControllerTest {
     @Test
     void getById_WhenProductExists_ShouldReturnProduct() throws Exception {
         // Given
-        Integer productId = 1;
+        Long productId = 1L;
         when(productService.getById(productId)).thenReturn(productDto1);
 
         // When & Then
@@ -192,7 +190,7 @@ class ProductControllerTest {
     @Test
     void update_WithValidData_ShouldUpdateProduct() throws Exception {
         // Given
-        Integer productId = 1;
+        Long productId = 1L;
         ProductDto updatedProduct = new ProductDto();
         updatedProduct.setName("Updated Product");
         updatedProduct.setPrice(5000.00);
@@ -216,7 +214,7 @@ class ProductControllerTest {
     @Test
     void delete_ShouldDeleteProduct() throws Exception {
         // Given
-        Integer productId = 1;
+        Long productId = 1L;
         doNothing().when(productService).delete(productId);
 
         // When & Then

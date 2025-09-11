@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public interface ProductSizeService {
-    List<ProductSizeDto> getAvailableSizes(Integer productId);
-    boolean isAvailable(Integer productId, String sizeName, Integer quantity);
-    ProductSize findByProductAndSize(Integer productId, String sizeName);
+    List<ProductSizeDto> getAvailableSizes(Long productId);
+    boolean isAvailable(Long productId, String sizeName, Integer quantity);
+    ProductSize findByProductAndSize(Long productId, String sizeName);
 }

@@ -15,9 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -50,7 +48,7 @@ public class BucketServiceImpl implements BucketService {
 
         ProductSize productSize = productSizeRepository.findByProductIdAndSizeName(
                         bucketAddDto.getProductId(), bucketAddDto.getSizeName())
-                .orElseThrow(() -> new RuntimeException("Size " + bucketAddDto.getSizeName() + " not available"));
+                .orElseThrow(() -> new ProductNotFoundException("Size " + bucketAddDto.getSizeName() + " not available"));
 
         // Validate stock
         if (productSize.getStockQuantity() < bucketAddDto.getQuantity()) {
@@ -85,18 +83,7 @@ public class BucketServiceImpl implements BucketService {
         // Update stocks
         bucketRepository.flush();
         productBucketRepository.flush();
-/*
-        double newTotal = calculateBucketTotal(bucket.getId());
-        bucket.setAmount(newTotal);
-        bucketRepository.save(bucket);
 
-        log.info("Bucket total updated to: {}", newTotal);
-        log.info("Product added to bucket successfully");
-
-        // Return fresh bucket data
-        Bucket refreshedBucket = bucketRepository.findById(bucket.getId()).orElseThrow();
-        return bucketMapper.toBucketDto(refreshedBucket);
-*/
         totalAmount(bucket.getId());
         Bucket updatedBucket = getFreshBucketWithProducts(bucket.getId());
 
@@ -160,14 +147,20 @@ public class BucketServiceImpl implements BucketService {
         productBucket.setProduct(product);
         productBucket.setQuantity(bucketAddDto.getQuantity());
         productBucket.setSizeName(bucketAddDto.getSizeName());
-        productBucket.setTotalAmount(product.getPrice() * bucketAddDto.getQuantity());
 
+//        double calculatedTotal = product.getPrice() * bucketAddDto.getQuantity();
+//        log.info("=== CALCULATING TOTAL ===");
+//        log.info("Product price: {}", product.getPrice());
+//        log.info("Quantity: {}", bucketAddDto.getQuantity());
+//        log.info("Calculated total: {}", calculatedTotal);
+
+        productBucket.setTotalAmount(product.getPrice() * bucketAddDto.getQuantity());
         productBucketRepository.save(productBucket);
     }
 
     @Override
     public BucketDto updateProductQuantity(Long bucketId, Long productId, Integer newQuantity, String sizeName) {
-        log.info("=== UPDATING PRODUCT QUANTITY ===");
+        log.info("UPDATING PRODUCT QUANTITY");
         log.info("Bucket ID: {}, Product ID: {}, Size: '{}', New Quantity: {}", bucketId, productId, sizeName, newQuantity);
 
         if (newQuantity < 1) {
@@ -178,32 +171,22 @@ public class BucketServiceImpl implements BucketService {
         Bucket bucket = bucketRepository.findById(bucketId)
                 .orElseThrow(() -> new BucketNotFoundException("No bucket with ID: " + bucketId));
 
-        log.info("Found bucket: {}", bucket.getId());
-
-        // DEBUG: Show all products in bucket first
-        List<ProductBucket> allProducts = productBucketRepository.findByBucketIdOrderBySequence(bucketId);
-        log.info("ALL PRODUCTS IN BUCKET {} ", bucketId);
-        for (ProductBucket pb : allProducts) {
-            log.info("ProductBucket ID: {}, Product ID: {}, Product Name: '{}', Size: '{}', Quantity: {}",
-                    pb.getId(), pb.getProduct().getId(), pb.getProduct().getName(), pb.getSizeName(), pb.getQuantity());
-        }
-
         // Find the ProductBucket using your repository method
         Optional<ProductBucket> productBucketOpt = productBucketRepository
                 .findByBucketIdAndProductIdAndSize(bucketId, productId, sizeName);
 
         if (productBucketOpt.isEmpty()) {
-            log.error("=== PRODUCT NOT FOUND ===");
-            log.error("Searching for: Bucket ID: {}, Product ID: {}, Size: '{}'", bucketId, productId, sizeName);
+            log.info("PRODUCT NOT FOUND");
+            log.info("Searching for: Bucket ID: {}, Product ID: {}, Size: '{}'", bucketId, productId, sizeName);
 
             // Show what products exist for debugging
             List<ProductBucket> sameProductId = productBucketRepository.findByBucketIdAndProductId(bucketId, productId);
             if (sameProductId.isEmpty()) {
-                log.error("No products found with Product ID: {} in bucket {}", productId, bucketId);
+                log.info("No products found with Product ID: {} in bucket {}", productId, bucketId);
             } else {
-                log.error("Products with Product ID {} found:", productId);
+                log.info("Products with Product ID {} found:", productId);
                 for (ProductBucket pb : sameProductId) {
-                    log.error("  - Size: '{}', Quantity: {}", pb.getSizeName(), pb.getQuantity());
+                    log.info("  - Size: '{}', Quantity: {}", pb.getSizeName(), pb.getQuantity());
                 }
             }
 
@@ -233,7 +216,7 @@ public class BucketServiceImpl implements BucketService {
 
         // SAVE: Make sure to save the ProductBucket
         ProductBucket savedProductBucket = productBucketRepository.save(productBucket);
-        productBucketRepository.flush();  // Force immediate database write
+        productBucketRepository.flush();  // flush-srazu database yazsin
 
         log.info("ProductBucket updated:");
         log.info("  - Quantity: {} -> {}", oldQuantity, savedProductBucket.getQuantity());
@@ -248,7 +231,7 @@ public class BucketServiceImpl implements BucketService {
         List<ProductBucket> freshProducts = productBucketRepository.findByBucketIdOrderBySequence(bucketId);
         updatedBucket.setProductBucketList(freshProducts);
 
-        log.info("=== UPDATE COMPLETED ===");
+        log.info(" UPDATE COMPLETED");
         log.info("Final bucket total: {}", updatedBucket.getAmount());
 
         return bucketMapper.toBucketDto(updatedBucket);
@@ -333,18 +316,27 @@ public class BucketServiceImpl implements BucketService {
     }
 
     public void totalAmount(Long bucketId) {
-        Bucket bucket = bucketRepository.findByIdWithProducts(bucketId)
-                .orElseThrow(() -> new BucketNotFoundException("No bucket with id: " + bucketId));
+        log.info("CALCULATING BUCKET TOTAL");
 
-        double total = bucket.getProductBucketList().stream()
-                .mapToDouble(ProductBucket::getTotalAmount)
+        // Products ayrıca yüklə
+        List<ProductBucket> products = productBucketRepository.findByBucketIdOrderBySequence(bucketId);
+
+        log.info("Found {} products for bucket {}", products.size(), bucketId);
+
+        double total = products.stream()
+                .mapToDouble(pb -> {
+                    log.info("Product: {}, TotalAmount: {}", pb.getProduct().getName(), pb.getTotalAmount());
+                    return pb.getTotalAmount();
+                })
                 .sum();
 
+        Bucket bucket = bucketRepository.findById(bucketId)
+                .orElseThrow(() -> new BucketNotFoundException("No bucket with id: " + bucketId));
+
+        log.info("Calculated bucket total: {}", total);
         bucket.setAmount(total);
         bucketRepository.save(bucket);
-
-        log.info("Updated bucket {} total to: {} from {} products",
-                bucketId, total, bucket.getProductBucketList().size());
+        log.info("Saved bucket with amount: {}", bucket.getAmount());
     }
 
     private static String generateBucketNumber(){

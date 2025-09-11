@@ -19,7 +19,7 @@ public class SizeGuideController {
     private final ProductSizeService productSizeService;
 
     @PostMapping("/product/{productId}/find-size")
-    public SizeRecommendationDto findMySize(@PathVariable Integer productId,
+    public SizeRecommendationDto findMySize(@PathVariable Long productId,
                                             @RequestBody SizeMeasurementDto measurementDto) {
         return sizeGuideService.findMySize(productId, measurementDto);
     }
@@ -30,7 +30,7 @@ public class SizeGuideController {
     }
 
     @GetMapping("/product/{productId}/sizes")
-    public List<ProductSizeDto> getAvailableSizes(@PathVariable Integer productId) {
+    public List<ProductSizeDto> getAvailableSizes(@PathVariable Long productId) {
         return productSizeService.getAvailableSizes(productId);
     }
 }
